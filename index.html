@@ -27,58 +27,51 @@
       
       <!-- Animation vectorielle -->
       <div class="mountain-animation">
-        <svg viewBox="0 0 800 200" class="climbing-animation">
+        <svg viewBox="0 0 800 200" class="climbing-svg">
           <!-- Montagne -->
-          <path d="M0,200 L100,100 L200,50 L300,100 L400,30 L500,80 L600,40 L700,120 L800,60 L800,200 Z" fill="#5a67d8" opacity="0.8"/>
-          <path d="M0,200 L50,150 L150,120 L250,80 L350,140 L450,90 L550,60 L650,110 L750,70 L800,100 L800,200 Z" fill="#6b7280" opacity="0.6"/>
+          <path d="M0,200 Q100,150 200,100 T400,50 T600,80 T800,40 L800,200 Z" fill="#5a67d8" opacity="0.8"/>
+          <path d="M0,200 Q50,180 150,160 T300,120 T500,90 T700,70 T800,60 L800,200 Z" fill="#6b7280" opacity="0.6"/>
+          
+          <!-- Crête -->
+          <path d="M0,200 L100,100 L200,50 L300,80 L400,30 L500,60 L600,40 L700,70 L800,20" 
+                stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8"/>
           
           <!-- Bonhommes qui grimpent -->
           <g class="climber" id="climber1">
-            <circle cx="50" cy="180" r="8" fill="#fbbf24"/>
-            <line x1="50" y1="188" x2="50" y2="165" stroke="#fbbf24" stroke-width="3"/>
-            <line x1="50" y1="165" x2="40" y2="140" stroke="#fbbf24" stroke-width="3"/>
-            <line x1="50" y1="165" x2="60" y2="140" stroke="#fbbf24" stroke-width="3"/>
+            <circle cx="50" cy="180" r="6" fill="#fbbf24"/>
+            <line x1="50" y1="186" x2="50" y2="170" stroke="#fbbf24" stroke-width="2"/>
+            <line x1="50" y1="170" x2="45" y2="155" stroke="#fbbf24" stroke-width="2"/>
+            <line x1="50" y1="170" x2="55" y2="155" stroke="#fbbf24" stroke-width="2"/>
           </g>
           
           <g class="climber" id="climber2">
-            <circle cx="200" cy="190" r="8" fill="#3b82f6"/>
-            <line x1="200" y1="198" x2="200" y2="175" stroke="#3b82f6" stroke-width="3"/>
-            <line x1="200" y1="175" x2="190" y2="150" stroke="#3b82f6" stroke-width="3"/>
-            <line x1="200" y1="175" x2="210" y2="150" stroke="#3b82f6" stroke-width="3"/>
+            <circle cx="200" cy="190" r="6" fill="#3b82f6"/>
+            <line x1="200" y1="196" x2="200" y2="175" stroke="#3b82f6" stroke-width="2"/>
+            <line x1="200" y1="175" x2="195" y2="160" stroke="#3b82f6" stroke-width="2"/>
+            <line x1="200" y1="175" x2="205" y2="160" stroke="#3b82f6" stroke-width="2"/>
           </g>
           
           <g class="climber" id="climber3">
-            <circle cx="350" cy="185" r="8" fill="#ef4444"/>
-            <line x1="350" y1="193" x2="350" y2="170" stroke="#ef4444" stroke-width="3"/>
-            <line x1="350" y1="170" x2="340" y2="145" stroke="#ef4444" stroke-width="3"/>
-            <line x1="350" y1="170" x2="360" y2="145" stroke="#ef4444" stroke-width="3"/>
+            <circle cx="350" cy="185" r="6" fill="#ef4444"/>
+            <line x1="350" y1="191" x2="350" y2="172" stroke="#ef4444" stroke-width="2"/>
+            <line x1="350" y1="172" x2="345" y2="157" stroke="#ef4444" stroke-width="2"/>
+            <line x1="350" y1="172" x2="355" y2="157" stroke="#ef4444" stroke-width="2"/>
           </g>
           
-          <!-- Rochers qui tombent -->
-          <g class="rock" id="rock1">
-            <circle cx="250" cy="20" r="10" fill="#6b7280"/>
-            <circle cx="260" cy="15" r="8" fill="#4b5563"/>
-            <circle cx="240" cy="25" r="6" fill="#374151"/>
+          <g class="climber" id="climber4">
+            <circle cx="500" cy="188" r="6" fill="#10b981"/>
+            <line x1="500" y1="194" x2="500" y2="173" stroke="#10b981" stroke-width="2"/>
+            <line x1="500" y1="173" x2="495" y2="158" stroke="#10b981" stroke-width="2"/>
+            <line x1="500" y1="173" x2="505" y2="158" stroke="#10b981" stroke-width="2"/>
           </g>
           
-          <g class="rock" id="rock2">
-            <circle cx="550" cy="30" r="12" fill="#6b7280"/>
-            <circle cx="565" cy="25" r="7" fill="#4b5563"/>
-            <circle cx="535" cy="35" r="9" fill="#374151"/>
-          </g>
-          
-          <g class="rock" id="rock3">
-            <circle cx="700" cy="15" r="8" fill="#6b7280"/>
-            <circle cx="710" cy="10" r="10" fill="#4b5563"/>
+          <g class="climber" id="climber5">
+            <circle cx="650" cy="192" r="6" fill="#ec4899"/>
+            <line x1="650" y1="198" x2="650" y2="174" stroke="#ec4899" stroke-width="2"/>
+            <line x1="650" y1="174" x2="645" y2="159" stroke="#ec4899" stroke-width="2"/>
+            <line x1="650" y1="174" x2="655" y2="159" stroke="#ec4899" stroke-width="2"/>
           </g>
         </svg>
-      </div>
-      
-      <!-- Photo du Château d'Oche -->
-      <div class="hero-image">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Chateau_d%27Oche_-_Bernex.jpg/1200px-Chateau_d%27Oche_-_Bernex.jpg" 
-             alt="Château d'Oche, Bernex, Haute-Savoie" 
-             loading="lazy">
       </div>
     </header>
 
@@ -156,6 +149,15 @@
           </button>
         </div>
       </div>
+    </section>
+
+    <!-- Photo du Château -->
+    <section class="photo-section">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+           alt="Paysage montagneux représentatif du Château d'Oche" 
+           class="chateau-photo"
+           loading="lazy">
+      <p class="photo-caption">Château d'Oche - Bernex, Haute-Savoie</p>
     </section>
 
     <!-- Votes Results -->
