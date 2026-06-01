@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rando Châteaux d'Oche 🏔️ | Sondage Kawaï</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>✨ Rando aux Châteaux d'Oche ✨</h1>
+    <p class="subtitle">Le sommet qui nous regarde de haut... comme ton ex après une rupture 😼</p>
+
+    <div class="info">
+      <p><strong>📅 Dates proposées :</strong> <span id="dates"></span></p>
+      <p><strong>👥 Équipes :</strong> Annemasse ⚡ | Canton de Vaud 🧀 | Thonon 🌊</p>
+    </div>
+
+    <div class="votes">
+      <h2>🗳️ Votes actuels</h2>
+      <div id="vote-results"></div>
+    </div>
+
+    <div class="form">
+      <h2>🎭 Choisis ton avatar + ta date !</h2>
+      <div class="avatars">
+        <label><input type="radio" name="avatar" value="🦊"><span class="avatar">🦊<br>Firefox<br><small>(le renard qui code en JS)</small></span></label>
+        <label><input type="radio" name="avatar" value="🐍"><span class="avatar">🐍<br>Serpent Sexy<br><small>(ssssssippin' tea)</small></span></label>
+        <label><input type="radio" name="avatar" value="🐼"><span class="avatar">🐼<br>Panda<br><small>(dort 23h/24)</small></span></label>
+        <label><input type="radio" name="avatar" value="🐗"><span class="avatar">🐗<br>Cochon<br><small>(mange les bugs)</small></span></label>
+      </div>
+
+      <div class="dates">
+        <h3>📆 Quelle date ?</h3>
+        <div id="date-buttons"></div>
+      </div>
+
+      <div class="pseudo">
+        <input type="text" id="pseudo" placeholder="Ton pseudo (ex: Jean-Mi)" required>
+        <button id="submit">🚀 Valider mon vote !</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
