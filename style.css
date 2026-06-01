@@ -110,42 +110,133 @@ p { color: var(--color-text-secondary); margin-bottom: var(--space-sm); }
 .separator { color: var(--color-text-muted); }
 .motto { font-weight: 600; font-style: italic; color: var(--color-primary); }
 
-/* ===== Mountain Animation ===== */
+/* ===== Mountain Animation (relaxed kawaii hike) ===== */
 .mountain-animation {
   width: 100%;
-  margin: var(--space-lg) 0;
+  margin: var(--space-md) 0 var(--space-lg);
   overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #e0e7ff 0%, #f8fafc 100%);
+  border: 1px solid #c7d2fe;
 }
 
 .climbing-svg {
   width: 100%;
   height: auto;
-  max-height: 150px;
+  max-height: 170px;
+  display: block;
 }
 
-.climber {
-  transform-origin: center bottom;
+/* Animaux qui gravissent tranquillement */
+.hike-animal {
+  transition: transform 120ms ease-out;
+  will-change: transform;
 }
 
-/* ===== Photo Section ===== */
-.photo-section {
+/* Durées différentes = rythme relaxant et organique */
+#fox   { animation: hike-along 38s linear infinite; }
+#snake { animation: hike-along 44s linear infinite 4s; }
+#panda { animation: hike-along 47s linear infinite 9s; }
+#boar  { animation: hike-along 39s linear infinite 2s; }
+#eagle { animation: hike-along 51s linear infinite 14s; }
+
+@keyframes hike-along {
+  0%   { transform: translateX(-60px) translateY(0); }
+  8%   { transform: translateX(40px) translateY(-6px); }
+  22%  { transform: translateX(180px) translateY(2px); }
+  35%  { transform: translateX(310px) translateY(-9px); }
+  50%  { transform: translateX(460px) translateY(1px); }
+  68%  { transform: translateX(620px) translateY(-7px); }
+  82%  { transform: translateX(740px) translateY(3px); }
+  100% { transform: translateX(920px) translateY(-2px); }
+}
+
+/* Petit balancement kawaii (tête/buste) par dessus */
+.hike-animal g {
+  animation: cute-bob 2.8s ease-in-out infinite;
+}
+
+#fox g   { animation-duration: 2.4s; }
+#snake g { animation-duration: 3.6s; animation-delay: 0.8s; }
+#panda g { animation-duration: 3.1s; }
+#boar g  { animation-duration: 2.7s; animation-delay: 1.2s; }
+#eagle g { animation-duration: 4.2s; }
+
+@keyframes cute-bob {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%     { transform: translateY(-1.5px) rotate(1.2deg); }
+}
+
+/* Pause adorable au survol (ils prennent une petite pause bien méritée) */
+.mountain-animation:hover .hike-animal {
+  animation-play-state: paused;
+}
+
+/* ===== Header Photo (kawaii hero) ===== */
+.header-photo {
+  margin: var(--space-md) 0 var(--space-lg);
   text-align: center;
-  margin: var(--space-lg) 0;
-}
-
-.chateau-photo {
-  max-width: 100%;
-  max-height: 300px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
   box-shadow: var(--shadow-lg);
-  object-fit: cover;
-  margin-bottom: var(--space-md);
+  border: 4px solid var(--color-bg-secondary);
 }
 
-.photo-caption {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+.header-photo .chateau-photo {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms ease;
+}
+
+.header-photo:hover .chateau-photo {
+  transform: scale(1.015);
+}
+
+.header-photo .photo-caption {
+  background: linear-gradient(to top, rgba(30,41,59,0.75), transparent);
+  color: white;
+  font-size: 0.85rem;
   font-style: italic;
+  padding: 0.65rem 1rem 0.5rem;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ===== Maps Link (cute + accessible) ===== */
+.maps-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.maps-link:hover {
+  background: var(--color-primary-light);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.maps-link:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+.map-pin {
+  display: inline-flex;
+  color: var(--color-secondary);
+  transition: transform 200ms ease;
+}
+
+.maps-link:hover .map-pin {
+  transform: scale(1.1) rotate(-8deg);
+  color: white;
 }
 
 /* ===== Sections ===== */
@@ -195,6 +286,26 @@ section { margin-bottom: var(--space-xl); }
   padding: var(--space-lg);
 }
 
+.results-note {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0 0.25rem;
+  font-family: inherit;
+}
+.btn-text:hover { color: var(--color-primary-dark); }
+
 /* ===== Vote Cards ===== */
 .vote-card {
   background: var(--color-bg-secondary);
@@ -217,7 +328,43 @@ section { margin-bottom: var(--space-xl); }
 }
 .vote-card .avatar-emoji { font-size: 2.5rem; display: block; margin-bottom: var(--space-xs); }
 .vote-card .pseudo { font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs); }
-.vote-card .date { font-size: 0.85rem; color: var(--color-text-muted); }
+
+/* Group headers in results (clearer UX) */
+.date-group-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.75rem;
+  margin-top: var(--space-sm);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-bg-tertiary);
+}
+.date-group-header .date-label { font-weight: 700; color: var(--color-primary); }
+.date-group-header .vote-count {
+  background: var(--color-primary-light);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+/* Cute attention state for missing form step */
+.needs-attention {
+  animation: gentle-shake 420ms ease;
+  border-color: var(--color-warning) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+@keyframes gentle-shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
 
 /* ===== Delete Vote Button ===== */
 .delete-vote {
@@ -325,6 +472,11 @@ section { margin-bottom: var(--space-xl); }
   transition: all var(--transition-normal);
 }
 .pseudo-input input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-light)20; }
+
+.form-feedback {
+  min-height: 1.25rem;
+  transition: all var(--transition-fast);
+}
 
 /* ===== Buttons ===== */
 .btn-primary {
@@ -437,6 +589,17 @@ section { margin-bottom: var(--space-xl); }
   justify-content: center;
 }
 
+.cute-confirm .modal-emoji {
+  font-size: 2.25rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.cute-confirm p {
+  font-size: 1.05rem;
+  margin-bottom: 1.25rem;
+}
+
 /* ===== Animations ===== */
 @keyframes climb {
   0% { transform: translateX(0) translateY(0); }
@@ -476,4 +639,18 @@ section { margin-bottom: var(--space-xl); }
   .title { flex-direction: column; }
   .avatars-grid { grid-template-columns: repeat(2, 1fr); }
   .results-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ===== Reduced motion (respect 2026 best practice) ===== */
+@media (prefers-reduced-motion: reduce) {
+  .hike-animal,
+  .hike-animal g,
+  .vote-card,
+  .header-photo .chateau-photo {
+    animation: none !important;
+    transition: none !important;
+  }
+  .mountain-animation:hover .hike-animal {
+    animation-play-state: paused;
+  }
 }

@@ -20,56 +20,153 @@
         <span class="title-icon">🥾</span>
       </h1>
       <p class="subtitle">
-        <span class="location">Bernex, Haute-Savoie</span>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Ch%C3%A2teau+d%27Oche%2C+Bernex%2C+Haute-Savoie" 
+           target="_blank" rel="noopener noreferrer" class="maps-link" aria-label="Voir Château d'Oche sur Google Maps">
+          <span class="map-pin" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </span>
+          <span class="location">Bernex, Haute-Savoie</span>
+        </a>
         <span class="separator">|</span>
         <span class="motto">« L'obstacle est le chemin » — Marc Aurèle</span>
       </p>
-      
-      <!-- Animation vectorielle -->
-      <div class="mountain-animation">
-        <svg viewBox="0 0 800 200" class="climbing-svg">
-          <!-- Montagne -->
-          <path d="M0,200 Q100,150 200,100 T400,50 T600,80 T800,40 L800,200 Z" fill="#5a67d8" opacity="0.8"/>
-          <path d="M0,200 Q50,180 150,160 T300,120 T500,90 T700,70 T800,60 L800,200 Z" fill="#6b7280" opacity="0.6"/>
-          
-          <!-- Crête -->
-          <path d="M0,200 L100,100 L200,50 L300,80 L400,30 L500,60 L600,40 L700,70 L800,20" 
-                stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8"/>
-          
-          <!-- Bonhommes qui grimpent -->
-          <g class="climber" id="climber1">
-            <circle cx="50" cy="180" r="6" fill="#fbbf24"/>
-            <line x1="50" y1="186" x2="50" y2="170" stroke="#fbbf24" stroke-width="2"/>
-            <line x1="50" y1="170" x2="45" y2="155" stroke="#fbbf24" stroke-width="2"/>
-            <line x1="50" y1="170" x2="55" y2="155" stroke="#fbbf24" stroke-width="2"/>
+
+      <!-- Photo réelle du Château d'Oche -->
+      <figure class="header-photo">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80" 
+             alt="Sommet du Château d'Oche et crêtes enneigées, Bernex, Haute-Savoie" 
+             class="chateau-photo"
+             loading="eager">
+        <figcaption class="photo-caption">Le Château d'Oche — notre terrain de jeu du week-end</figcaption>
+      </figure>
+
+      <!-- Animation vectorielle relaxante : nos animaux gravissent tranquillement la crête -->
+      <div class="mountain-animation" aria-hidden="true">
+        <svg viewBox="0 0 900 220" class="climbing-svg" id="relaxed-hike-svg">
+          <!-- Ciel dégradé doux -->
+          <defs>
+            <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#e0e7ff"/>
+              <stop offset="100%" stop-color="#f0f4ff"/>
+            </linearGradient>
+            <linearGradient id="ridge1" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#4f46e5"/>
+            </linearGradient>
+            <linearGradient id="ridge2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#a5b4fc"/>
+              <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+            <linearGradient id="snow" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f8fafc"/>
+              <stop offset="100%" stop-color="#e0e7ff"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Fond ciel -->
+          <rect width="900" height="220" fill="url(#sky)"/>
+
+          <!-- Montagnes lointaines (douces) -->
+          <path d="M0,220 Q120,140 240,165 T480,120 T720,155 T900,110 L900,220 Z" fill="#c7d2fe" opacity="0.6"/>
+          <path d="M0,220 Q80,175 200,155 T450,135 T680,160 T900,130 L900,220 Z" fill="#a5b4fc" opacity="0.5"/>
+
+          <!-- Montagne principale avec crête -->
+          <path d="M0,220 Q90,130 180,145 T320,95 T480,125 T620,80 T780,110 T900,70 L900,220 Z" fill="url(#ridge1)"/>
+          <!-- Crête enneigée / herbe -->
+          <path d="M0,220 Q90,130 180,145 T320,95 T480,125 T620,80 T780,110 T900,70" fill="none" stroke="url(#snow)" stroke-width="18" stroke-linecap="round" opacity="0.85"/>
+          <!-- Ligne de crête fine -->
+          <path d="M0,220 Q90,130 180,145 T320,95 T480,125 T620,80 T780,110 T900,70" fill="none" stroke="#f1e7ff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+
+          <!-- Petits détails kawaii : quelques sapins stylisés et fleurs -->
+          <g fill="#4ade80" opacity="0.7">
+            <path d="M120,195 L125,175 L130,195 Z"/>
+            <circle cx="125" cy="172" r="3.5"/>
+            <path d="M280,168 L285,150 L290,168 Z"/>
+            <circle cx="285" cy="147" r="3"/>
           </g>
-          
-          <g class="climber" id="climber2">
-            <circle cx="200" cy="190" r="6" fill="#3b82f6"/>
-            <line x1="200" y1="196" x2="200" y2="175" stroke="#3b82f6" stroke-width="2"/>
-            <line x1="200" y1="175" x2="195" y2="160" stroke="#3b82f6" stroke-width="2"/>
-            <line x1="200" y1="175" x2="205" y2="160" stroke="#3b82f6" stroke-width="2"/>
+          <g fill="#f472b6" opacity="0.6">
+            <circle cx="410" cy="142" r="2.5"/>
+            <circle cx="590" cy="118" r="2"/>
           </g>
-          
-          <g class="climber" id="climber3">
-            <circle cx="350" cy="185" r="6" fill="#ef4444"/>
-            <line x1="350" y1="191" x2="350" y2="172" stroke="#ef4444" stroke-width="2"/>
-            <line x1="350" y1="172" x2="345" y2="157" stroke="#ef4444" stroke-width="2"/>
-            <line x1="350" y1="172" x2="355" y2="157" stroke="#ef4444" stroke-width="2"/>
+
+          <!-- Groupe Animaux (positions de départ espacées le long de la crête) -->
+          <!-- 🦊 Fox - lent et curieux -->
+          <g class="hike-animal" id="fox" data-speed="38">
+            <g transform="translate(140,138)">
+              <ellipse cx="0" cy="4" rx="7" ry="5" fill="#f97316"/>
+              <circle cx="-2" cy="-1" r="3.5" fill="#fff7ed"/>
+              <circle cx="3" cy="-1.5" r="2.8" fill="#f97316"/>
+              <!-- oreilles -->
+              <path d="M-5,-4 L-7,-9 L-1,-5 Z" fill="#f97316"/>
+              <path d="M1,-4.5 L3,-8 L5,-3 Z" fill="#f97316"/>
+              <!-- queue touffue -->
+              <ellipse cx="-9" cy="6" rx="4" ry="3" fill="#f97316" transform="rotate(-25)"/>
+            </g>
           </g>
-          
-          <g class="climber" id="climber4">
-            <circle cx="500" cy="188" r="6" fill="#10b981"/>
-            <line x1="500" y1="194" x2="500" y2="173" stroke="#10b981" stroke-width="2"/>
-            <line x1="500" y1="173" x2="495" y2="158" stroke="#10b981" stroke-width="2"/>
-            <line x1="500" y1="173" x2="505" y2="158" stroke="#10b981" stroke-width="2"/>
+
+          <!-- 🐍 Snake - glisse zen -->
+          <g class="hike-animal" id="snake" data-speed="42">
+            <g transform="translate(260,122)">
+              <ellipse cx="0" cy="0" rx="8" ry="3.5" fill="#22c55e"/>
+              <!-- tête -->
+              <ellipse cx="7" cy="0" rx="4" ry="3" fill="#16a34a"/>
+              <circle cx="9" cy="-1" r="1.2" fill="#fff"/>
+              <!-- motif relax -->
+              <circle cx="-2" cy="0" r="1.5" fill="#86efac" opacity="0.6"/>
+            </g>
           </g>
-          
-          <g class="climber" id="climber5">
-            <circle cx="650" cy="192" r="6" fill="#ec4899"/>
-            <line x1="650" y1="198" x2="650" y2="174" stroke="#ec4899" stroke-width="2"/>
-            <line x1="650" y1="174" x2="645" y2="159" stroke="#ec4899" stroke-width="2"/>
-            <line x1="650" y1="174" x2="655" y2="159" stroke="#ec4899" stroke-width="2"/>
+
+          <!-- 🐼 Panda - tranquille et rond -->
+          <g class="hike-animal" id="panda" data-speed="45">
+            <g transform="translate(400,108)">
+              <!-- corps -->
+              <ellipse cx="0" cy="3" rx="6.5" ry="5.5" fill="#111827"/>
+              <!-- tête -->
+              <circle cx="1" cy="-2" r="5" fill="#f8fafc"/>
+              <!-- oreilles -->
+              <circle cx="-3" cy="-5" r="2.2" fill="#111827"/>
+              <circle cx="5" cy="-5" r="2.2" fill="#111827"/>
+              <!-- yeux patchs -->
+              <ellipse cx="-1.5" cy="-2.5" rx="1.8" ry="2" fill="#111827"/>
+              <ellipse cx="3.5" cy="-2.5" rx="1.8" ry="2" fill="#111827"/>
+              <!-- nez -->
+              <ellipse cx="1" cy="0.5" rx="1" ry="0.7" fill="#111827"/>
+            </g>
+          </g>
+
+          <!-- 🐗 Wildboar - costaud mais cool -->
+          <g class="hike-animal" id="boar" data-speed="40">
+            <g transform="translate(540,95)">
+              <!-- corps -->
+              <ellipse cx="0" cy="2" rx="8" ry="5" fill="#854d0e"/>
+              <!-- tête -->
+              <ellipse cx="7" cy="0" rx="5" ry="4" fill="#713f12"/>
+              <!-- oreilles pointues -->
+              <path d="M3,-3 L1,-7 L6,-3 Z" fill="#854d0e"/>
+              <path d="M9,-2.5 L11,-6 L12,-1 Z" fill="#713f12"/>
+              <!-- défensettes mignonnes -->
+              <line x1="10" y1="2" x2="11" y2="4" stroke="#f5d0a9" stroke-width="1.2"/>
+            </g>
+          </g>
+
+          <!-- 🦅 Eagle - majestueux et planant -->
+          <g class="hike-animal" id="eagle" data-speed="48">
+            <g transform="translate(680,82)">
+              <!-- corps -->
+              <ellipse cx="0" cy="2" rx="4.5" ry="6" fill="#334155"/>
+              <!-- tête blanche -->
+              <circle cx="1" cy="-4" r="3" fill="#f1f5f9"/>
+              <!-- bec -->
+              <path d="M3,-4 L6,-3 L3,-2 Z" fill="#f59e0b"/>
+              <!-- ailes déployées relax -->
+              <ellipse cx="-6" cy="1" rx="5" ry="1.8" fill="#475569" transform="rotate(-18)"/>
+              <ellipse cx="6" cy="1" rx="5" ry="1.8" fill="#475569" transform="rotate(18)"/>
+              <!-- œil -->
+              <circle cx="2" cy="-4.5" r="1" fill="#111827"/>
+            </g>
           </g>
         </svg>
       </div>
@@ -136,28 +233,23 @@
 
       <div class="form-step">
         <h3>3️⃣ Ton pseudo</h3>
-        <div class="pseudo-input">
-          <input 
-            type="text" 
-            id="pseudo" 
-            placeholder="Ex: Jean-Mi, Sophie, Marc..."
-            aria-label="Ton pseudo"
-            required
-          >
-          <button id="submit" class="btn-primary" aria-label="Valider mon vote">
-            ✅ Valider mon vote
-          </button>
-        </div>
+        <form id="vote-form" novalidate>
+          <div class="pseudo-input">
+            <input 
+              type="text" 
+              id="pseudo" 
+              placeholder="Ex: Jean-Mi, Sophie, Marc..."
+              aria-label="Ton pseudo"
+              autocomplete="nickname"
+              required
+            >
+            <button id="submit" type="submit" class="btn-primary" aria-label="Valider mon vote" disabled>
+              ✅ Valider mon vote
+            </button>
+          </div>
+          <div id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></div>
+        </form>
       </div>
-    </section>
-
-    <!-- Photo du Château -->
-    <section class="photo-section">
-      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-           alt="Paysage montagneux représentatif du Château d'Oche" 
-           class="chateau-photo"
-           loading="lazy">
-      <p class="photo-caption">Château d'Oche - Bernex, Haute-Savoie</p>
     </section>
 
     <!-- Votes Results -->
@@ -166,6 +258,7 @@
       <div class="results-grid" id="vote-results">
         <p class="empty-state">Aucun vote pour l'instant... 😢</p>
       </div>
+      <p class="results-note">Votes sauvegardés localement dans ton navigateur uniquement • <button id="clear-all-btn" class="btn-text">tout effacer</button></p>
     </section>
 
     <!-- Export Section -->
@@ -225,6 +318,18 @@
     <div class="modal-content">
       <p>C'est bien, fais péter l'IBAN cousin-e !</p>
       <button id="close-validation" class="btn-primary">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Cute Delete Confirm Modal (kawaii + accessible) -->
+  <div id="delete-confirm-modal" class="modal">
+    <div class="modal-content cute-confirm">
+      <div class="modal-emoji">🥾❓</div>
+      <p id="delete-confirm-text">Tu es sûr de vouloir supprimer ce vote ?</p>
+      <div class="modal-buttons">
+        <button id="delete-confirm-no" class="btn-secondary">Non, je garde !</button>
+        <button id="delete-confirm-yes" class="btn-danger">Oui, supprimer</button>
+      </div>
     </div>
   </div>
 
