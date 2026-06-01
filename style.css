@@ -123,35 +123,16 @@ p { color: var(--color-text-secondary); margin-bottom: var(--space-sm); }
 .climbing-svg {
   width: 100%;
   height: auto;
-  max-height: 170px;
+  max-height: 195px;
   display: block;
 }
 
-/* Animaux qui gravissent tranquillement */
+/* Animaux qui gravissent tranquillement la crête (mouvement via animateMotion SVG) */
 .hike-animal {
-  transition: transform 120ms ease-out;
-  will-change: transform;
+  /* le déplacement est géré par <animateMotion> pour suivre parfaitement la crête */
 }
 
-/* Durées différentes = rythme relaxant et organique */
-#fox   { animation: hike-along 38s linear infinite; }
-#snake { animation: hike-along 44s linear infinite 4s; }
-#panda { animation: hike-along 47s linear infinite 9s; }
-#boar  { animation: hike-along 39s linear infinite 2s; }
-#eagle { animation: hike-along 51s linear infinite 14s; }
-
-@keyframes hike-along {
-  0%   { transform: translateX(-60px) translateY(0); }
-  8%   { transform: translateX(40px) translateY(-6px); }
-  22%  { transform: translateX(180px) translateY(2px); }
-  35%  { transform: translateX(310px) translateY(-9px); }
-  50%  { transform: translateX(460px) translateY(1px); }
-  68%  { transform: translateX(620px) translateY(-7px); }
-  82%  { transform: translateX(740px) translateY(3px); }
-  100% { transform: translateX(920px) translateY(-2px); }
-}
-
-/* Petit balancement kawaii (tête/buste) par dessus */
+/* Petit balancement kawaii (tête/buste) sur le contenu interne */
 .hike-animal g {
   animation: cute-bob 2.8s ease-in-out infinite;
 }
@@ -167,7 +148,7 @@ p { color: var(--color-text-secondary); margin-bottom: var(--space-sm); }
   50%     { transform: translateY(-1.5px) rotate(1.2deg); }
 }
 
-/* Pause adorable au survol (ils prennent une petite pause bien méritée) */
+/* Pause adorable au survol */
 .mountain-animation:hover .hike-animal {
   animation-play-state: paused;
 }
