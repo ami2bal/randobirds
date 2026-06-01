@@ -25,6 +25,55 @@
         <span class="motto">« L'obstacle est le chemin » — Marc Aurèle</span>
       </p>
       
+      <!-- Animation vectorielle -->
+      <div class="mountain-animation">
+        <svg viewBox="0 0 800 200" class="climbing-animation">
+          <!-- Montagne -->
+          <path d="M0,200 L100,100 L200,50 L300,100 L400,30 L500,80 L600,40 L700,120 L800,60 L800,200 Z" fill="#5a67d8" opacity="0.8"/>
+          <path d="M0,200 L50,150 L150,120 L250,80 L350,140 L450,90 L550,60 L650,110 L750,70 L800,100 L800,200 Z" fill="#6b7280" opacity="0.6"/>
+          
+          <!-- Bonhommes qui grimpent -->
+          <g class="climber" id="climber1">
+            <circle cx="50" cy="180" r="8" fill="#fbbf24"/>
+            <line x1="50" y1="188" x2="50" y2="165" stroke="#fbbf24" stroke-width="3"/>
+            <line x1="50" y1="165" x2="40" y2="140" stroke="#fbbf24" stroke-width="3"/>
+            <line x1="50" y1="165" x2="60" y2="140" stroke="#fbbf24" stroke-width="3"/>
+          </g>
+          
+          <g class="climber" id="climber2">
+            <circle cx="200" cy="190" r="8" fill="#3b82f6"/>
+            <line x1="200" y1="198" x2="200" y2="175" stroke="#3b82f6" stroke-width="3"/>
+            <line x1="200" y1="175" x2="190" y2="150" stroke="#3b82f6" stroke-width="3"/>
+            <line x1="200" y1="175" x2="210" y2="150" stroke="#3b82f6" stroke-width="3"/>
+          </g>
+          
+          <g class="climber" id="climber3">
+            <circle cx="350" cy="185" r="8" fill="#ef4444"/>
+            <line x1="350" y1="193" x2="350" y2="170" stroke="#ef4444" stroke-width="3"/>
+            <line x1="350" y1="170" x2="340" y2="145" stroke="#ef4444" stroke-width="3"/>
+            <line x1="350" y1="170" x2="360" y2="145" stroke="#ef4444" stroke-width="3"/>
+          </g>
+          
+          <!-- Rochers qui tombent -->
+          <g class="rock" id="rock1">
+            <circle cx="250" cy="20" r="10" fill="#6b7280"/>
+            <circle cx="260" cy="15" r="8" fill="#4b5563"/>
+            <circle cx="240" cy="25" r="6" fill="#374151"/>
+          </g>
+          
+          <g class="rock" id="rock2">
+            <circle cx="550" cy="30" r="12" fill="#6b7280"/>
+            <circle cx="565" cy="25" r="7" fill="#4b5563"/>
+            <circle cx="535" cy="35" r="9" fill="#374151"/>
+          </g>
+          
+          <g class="rock" id="rock3">
+            <circle cx="700" cy="15" r="8" fill="#6b7280"/>
+            <circle cx="710" cy="10" r="10" fill="#4b5563"/>
+          </g>
+        </svg>
+      </div>
+      
       <!-- Photo du Château d'Oche -->
       <div class="hero-image">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Chateau_d%27Oche_-_Bernex.jpg/1200px-Chateau_d%27Oche_-_Bernex.jpg" 
@@ -128,6 +177,53 @@
     <footer class="footer">
       <p>Made with ❤️ for team randobirds | One-time poll</p>
     </footer>
+  </div>
+
+  <!-- Modal IBAN -->
+  <div id="iban-modal" class="modal">
+    <div class="modal-content">
+      <h3>Merci d'avoir validé votre don à l'association Brice4Good</h3>
+      <p>Pour compléter votre inscription, merci de renseigner votre IBAN ci-dessous et de cocher "J'accepte"</p>
+      <div class="iban-form">
+        <input type="text" id="iban-input" placeholder="FR76 1234 5678 90ABC DEFG..." aria-label="Votre IBAN">
+        <label class="checkbox-label">
+          <input type="checkbox" id="accept-checkbox">
+          <span>J'accepte</span>
+        </label>
+      </div>
+      <div class="modal-buttons">
+        <button id="cancel-iban" class="btn-danger">Annuler</button>
+        <button id="validate-iban" class="btn-primary">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmation Annulation 1 -->
+  <div id="confirm-cancel-modal" class="modal">
+    <div class="modal-content">
+      <p>C'est dommage, je pensais pas que t'étais comme ça...</p>
+      <p>Sûr-e que tu t'es pas trompé de bouton ?</p>
+      <div class="modal-buttons">
+        <button id="confirm-cancel-validate" class="btn-primary">Valider</button>
+        <button id="confirm-cancel-cancel" class="btn-danger">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmation Annulation 2 -->
+  <div id="final-cancel-modal" class="modal">
+    <div class="modal-content">
+      <p>J'espère qu'il arrivera rien de malheureux au 7ème fils de ton 7ème fils...</p>
+      <button id="close-final-cancel" class="btn-primary">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Modal Validation -->
+  <div id="validation-modal" class="modal">
+    <div class="modal-content">
+      <p>C'est bien, fais péter l'IBAN cousin-e !</p>
+      <button id="close-validation" class="btn-primary">Fermer</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

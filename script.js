@@ -92,8 +92,53 @@ const elements = {
   voteResults: document.getElementById('vote-results'),
   pseudoInput: document.getElementById('pseudo'),
   submitBtn: document.getElementById('submit'),
-  exportBtn: document.getElementById('export-btn')
+  exportBtn: document.getElementById('export-btn'),
+  // Modal elements
+  ibanModal: document.getElementById('iban-modal'),
+  confirmCancelModal: document.getElementById('confirm-cancel-modal'),
+  finalCancelModal: document.getElementById('final-cancel-modal'),
+  validationModal: document.getElementById('validation-modal'),
+  cancelIbanBtn: document.getElementById('cancel-iban'),
+  validateIbanBtn: document.getElementById('validate-iban'),
+  confirmCancelValidateBtn: document.getElementById('confirm-cancel-validate'),
+  confirmCancelCancelBtn: document.getElementById('confirm-cancel-cancel'),
+  closeFinalCancelBtn: document.getElementById('close-final-cancel'),
+  closeValidationBtn: document.getElementById('close-validation')
 };
+
+// ===== Modal Functions =====
+function showModal(modal) {
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function hideModal(modal) {
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function hideAllModals() {
+  [elements.ibanModal, elements.confirmCancelModal, elements.finalCancelModal, elements.validationModal].forEach(hideModal);
+}
+
+// ===== Animation Functions =====
+function initAnimation() {
+  // Animer les grimpeurs
+  const climbers = document.querySelectorAll('.climber');
+  climbers.forEach((climber, index) => {
+    const duration = 10 + (index * 3); // Durée différente pour chaque
+    climber.style.animation = `climb ${duration}s linear infinite`;
+  });
+  
+  // Animer les rochers
+  const rocks = document.querySelectorAll('.rock');
+  rocks.forEach((rock, index) => {
+    const delay = index * 2;
+    const duration = 8 + (index * 2);
+    rock.style.animation = `fall ${duration}s linear infinite`;
+    rock.style.animationDelay = `${delay}s`;
+  });
+}
 
 // ===== Initialize Dates =====
 function initDates() {
@@ -164,7 +209,6 @@ function displayResults() {
       deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (confirm(`Supprimer le vote de ${vote.pseudo} ?`)) {
-          // Trouver l'index global du vote
           const globalIndex = State.votes.findIndex(v => 
             v.pseudo === vote.pseudo && v.date === vote.date && v.avatar === vote.avatar
           );
@@ -205,16 +249,80 @@ function handleSubmit() {
   document.querySelectorAll('input[name="avatar"]').forEach(r => r.checked = false);
   document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('selected'));
   
-  // Focus on pseudo input for next vote
-  elements.pseudoInput.focus();
+  // Afficher la popup IBAN
+  showModal(elements.ibanModal);
+}
+
+// ===== Handle IBAN Modal =====
+function initModalListeners() {
+  // Annuler IBAN
+  elements.cancelIbanBtn.addEventListener('click', () => {
+    hideModal(elements.ibanModal);
+    showModal(elements.confirmCancelModal);
+  });
   
-  alert(`✅ ${pseudo} a voté pour le ${selectedDateBtn.dataset.day} ${new Date(selectedDateBtn.dataset.date).toLocaleDateString('fr-FR')} !`);
+  // Valider IBAN (vérification basique)
+  elements.validateIbanBtn.addEventListener('click', () => {
+    const ibanInput = document.getElementById('iban-input');
+    const acceptCheckbox = document.getElementById('accept-checkbox');
+    
+    if (!acceptCheckbox.checked) {
+      alert('⚠️ Tu dois cocher "J\'accepte" !');
+      return;
+    }
+    
+    if (!ibanInput.value.trim()) {
+      alert('⚠️ Il faut renseigner un IBAN !');
+      return;
+    }
+    
+    hideModal(elements.ibanModal);
+    showModal(elements.validationModal);
+    
+    // Réinitialiser les champs pour la prochaine fois
+    ibanInput.value = '';
+    acceptCheckbox.checked = false;
+  });
+  
+  // Valider dans la popup de confirmation d'annulation
+  elements.confirmCancelValidateBtn.addEventListener('click', () => {
+    hideModal(elements.confirmCancelModal);
+    showModal(elements.validationModal);
+  });
+  
+  // Annuler dans la popup de confirmation d'annulation
+  elements.confirmCancelCancelBtn.addEventListener('click', () => {
+    hideModal(elements.confirmCancelModal);
+    showModal(elements.finalCancelModal);
+  });
+  
+  // Fermer la popup finale d'annulation
+  elements.closeFinalCancelBtn.addEventListener('click', () => {
+    hideModal(elements.finalCancelModal);
+  });
+  
+  // Fermer la popup de validation
+  elements.closeValidationBtn.addEventListener('click', () => {
+    hideModal(elements.validationModal);
+  });
+  
+  // Fermer les modals en cliquant à l'extérieur
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideModal(modal);
+      }
+    });
+  });
 }
 
 // ===== Initialize App =====
 function init() {
   // Generate and display dates
   const dates = initDates();
+  
+  // Initialize animation
+  initAnimation();
   
   // Display initial results
   displayResults();
@@ -223,11 +331,29 @@ function init() {
   elements.submitBtn.addEventListener('click', handleSubmit);
   elements.exportBtn.addEventListener('click', () => State.exportVotes());
   
+  // Modal listeners
+  initModalListeners();
+  
   // Allow Enter key to submit
   elements.pseudoInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSubmit();
   });
 }
+
+// ===== CSS Keyframes (injecté dynamiquement) =====
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes climb {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100px, -100px); }
+  }
+  
+  @keyframes fall {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(0, 200px) rotate(720deg); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
 
 // ===== Start App =====
 document.addEventListener('DOMContentLoaded', init);
