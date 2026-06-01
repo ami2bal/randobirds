@@ -1,6 +1,6 @@
 // ===== Configuration =====
 const CONFIG = {
-  startDate: new Date('2026-02-13'),
+  startDate: new Date('2026-06-13'),  // Rando à partir du 13 juin 2026 (4 week-ends : sam + dim)
   weeks: 4,
   avatars: [
     { emoji: '🦊', name: 'Firefox', desc: 'CCO' },
