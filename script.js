@@ -1,110 +1,233 @@
-// Génère les 4 dates (2 samedis + 2 dimanches à partir d'aujourd'hui)
-function getNextWeekendDates() {
+// ===== Configuration =====
+const CONFIG = {
+  // Dates fixes à partir du 13 février 2026 (samedi)
+  startDate: new Date('2026-02-13'), // Samedi 13 février 2026
+  weeks: 4, // 4 week-ends
+  avatars: [
+    { emoji: '🦊', name: 'Firefox', desc: 'CCO' },
+    { emoji: '🐍', name: 'Snake', desc: 'Botaniste à l\'ombre' },
+    { emoji: '🐼', name: 'Panda', desc: 'Espèce protégée' },
+    { emoji: '🐗', name: 'Wildboar', desc: 'Jambon de service' },
+    { emoji: '🦅', name: 'Eagle', desc: 'Gourmet à viscères' }
+  ]
+};
+
+// ===== State Management =====
+const State = {
+  votes: JSON.parse(localStorage.getItem('randoVotes')) || [],
+  
+  save() {
+    localStorage.setItem('randoVotes', JSON.stringify(this.votes));
+  },
+  
+  addVote(vote) {
+    this.votes.push(vote);
+    this.save();
+  },
+  
+  removeVote(index) {
+    this.votes.splice(index, 1);
+    this.save();
+  },
+  
+  exportVotes() {
+    const data = JSON.stringify(this.votes, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `votes-rando-oche-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+};
+
+// ===== Date Generation =====
+function generateDates() {
   const dates = [];
-  const today = new Date();
-  let day = today.getDay(); // 0=dim, 1=lun, ..., 6=sam
-  let date = new Date(today);
-
-  // Trouver le prochain samedi
-  if (day <= 6) date.setDate(today.getDate() + (6 - day));
-  else date.setDate(today.getDate() + 6);
-  dates.push(new Date(date)); // Samedi 1
-
-  date.setDate(date.getDate() + 1);
-  dates.push(new Date(date)); // Dimanche 1
-
-  date.setDate(date.getDate() + 6);
-  dates.push(new Date(date)); // Samedi 2
-
-  date.setDate(date.getDate() + 1);
-  dates.push(new Date(date)); // Dimanche 2
-
+  const startDate = new Date(CONFIG.startDate);
+  
+  // Vérifie que c'est bien un samedi
+  if (startDate.getDay() !== 6) {
+    console.error('La date de départ doit être un samedi !');
+    return [];
+  }
+  
+  for (let week = 0; week < CONFIG.weeks; week++) {
+    const saturday = new Date(startDate);
+    saturday.setDate(startDate.getDate() + (week * 7));
+    
+    const sunday = new Date(saturday);
+    sunday.setDate(saturday.getDate() + 1);
+    
+    dates.push({
+      date: saturday.toISOString().split('T')[0],
+      label: saturday.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long',
+        year: 'numeric' 
+      }),
+      day: 'samedi'
+    });
+    
+    dates.push({
+      date: sunday.toISOString().split('T')[0],
+      label: sunday.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long',
+        year: 'numeric' 
+      }),
+      day: 'dimanche'
+    });
+  }
+  
   return dates;
 }
 
-const dates = getNextWeekendDates();
-const dateOptions = dates.map(d => ({
-  date: d.toISOString().split('T')[0],
-  label: d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
-}));
+// ===== DOM Elements =====
+const elements = {
+  dateButtons: document.getElementById('date-buttons'),
+  voteResults: document.getElementById('vote-results'),
+  pseudoInput: document.getElementById('pseudo'),
+  submitBtn: document.getElementById('submit'),
+  exportBtn: document.getElementById('export-btn')
+};
 
-// Affiche les dates dans le HTML
-document.getElementById('dates').textContent = dateOptions.map(d => d.label).join(' | ');
-
-// Gère les boutons de date
-const dateButtons = document.getElementById('date-buttons');
-dateOptions.forEach((opt, i) => {
-  const btn = document.createElement('button');
-  btn.className = 'date-btn';
-  btn.textContent = opt.label;
-  btn.dataset.date = opt.date;
-  btn.onclick = () => {
-    document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  };
-  dateButtons.appendChild(btn);
-});
-
-// Charge les votes depuis localStorage
-function loadVotes() {
-  const votes = JSON.parse(localStorage.getItem('randoVotes')) || [];
-  return votes;
+// ===== Initialize Dates =====
+function initDates() {
+  const dates = generateDates();
+  
+  // Crée les boutons de date
+  dates.forEach(date => {
+    const btn = document.createElement('button');
+    btn.className = 'date-btn';
+    btn.textContent = date.label;
+    btn.dataset.date = date.date;
+    btn.dataset.day = date.day;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.date-btn').forEach(b => {
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+    });
+    elements.dateButtons.appendChild(btn);
+  });
+  
+  return dates;
 }
 
-// Sauvegarde les votes
-function saveVotes(votes) {
-  localStorage.setItem('randoVotes', JSON.stringify(votes));
-}
-
-// Affiche les résultats
+// ===== Display Results =====
 function displayResults() {
-  const votes = loadVotes();
-  const container = document.getElementById('vote-results');
-  container.innerHTML = '';
-
+  const votes = State.votes;
+  
   if (votes.length === 0) {
-    container.innerHTML = '<p>Aucun vote pour l\'instant... 😢</p>';
+    elements.voteResults.innerHTML = '<p class="empty-state">Aucun vote pour l\'instant... 😢</p>';
     return;
   }
-
-  votes.forEach(vote => {
-    const card = document.createElement('div');
-    card.className = 'vote-card';
-    card.innerHTML = `
-      <div class="avatar">${vote.avatar}</div>
-      <div class="pseudo">${vote.pseudo}</div>
-      <div class="date">${new Date(vote.date).toLocaleDateString('fr-FR', { weekday: 'short' })} ${vote.date}</div>
-    `;
-    container.appendChild(card);
+  
+  // Grouper les votes par date
+  const votesByDate = votes.reduce((acc, vote) => {
+    if (!acc[vote.date]) acc[vote.date] = [];
+    acc[vote.date].push(vote);
+    return acc;
+  }, {});
+  
+  // Trier les votes par date
+  const sortedDates = Object.keys(votesByDate).sort();
+  
+  elements.voteResults.innerHTML = '';
+  
+  sortedDates.forEach(date => {
+    const dateVotes = votesByDate[date];
+    const dateLabel = new Date(date).toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short'
+    });
+    
+    dateVotes.forEach((vote, index) => {
+      const card = document.createElement('div');
+      card.className = 'vote-card';
+      card.dataset.index = index;
+      card.dataset.date = date;
+      card.innerHTML = `
+        <span class="avatar-emoji">${vote.avatar}</span>
+        <span class="pseudo">${vote.pseudo}</span>
+        <span class="date">${dateLabel}</span>
+        <button class="delete-vote" aria-label="Supprimer le vote de ${vote.pseudo}" title="Supprimer">❌</button>
+      `;
+      
+      // Ajouter l'événement de suppression
+      const deleteBtn = card.querySelector('.delete-vote');
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm(`Supprimer le vote de ${vote.pseudo} ?`)) {
+          // Trouver l'index global du vote
+          const globalIndex = State.votes.findIndex(v => 
+            v.pseudo === vote.pseudo && v.date === vote.date && v.avatar === vote.avatar
+          );
+          if (globalIndex !== -1) {
+            State.removeVote(globalIndex);
+            displayResults();
+          }
+        }
+      });
+      
+      elements.voteResults.appendChild(card);
+    });
   });
 }
 
-// Soumission du formulaire
-document.getElementById('submit').addEventListener('click', () => {
+// ===== Handle Form Submission =====
+function handleSubmit() {
   const selectedAvatar = document.querySelector('input[name="avatar"]:checked');
-  const selectedDate = document.querySelector('.date-btn.selected');
-  const pseudo = document.getElementById('pseudo').value.trim();
-
-  if (!selectedAvatar || !selectedDate || !pseudo) {
+  const selectedDateBtn = document.querySelector('.date-btn.selected');
+  const pseudo = elements.pseudoInput.value.trim();
+  
+  if (!selectedAvatar || !selectedDateBtn || !pseudo) {
     alert('⚠️ Il faut choisir un avatar, une date ET un pseudo !');
     return;
   }
-
-  const votes = loadVotes();
-  votes.push({
+  
+  const vote = {
     avatar: selectedAvatar.value,
-    date: selectedDate.dataset.date,
+    date: selectedDateBtn.dataset.date,
     pseudo: pseudo
-  });
-  saveVotes(votes);
-
+  };
+  
+  State.addVote(vote);
   displayResults();
-  document.getElementById('pseudo').value = '';
+  
+  // Reset form
+  elements.pseudoInput.value = '';
   document.querySelectorAll('input[name="avatar"]').forEach(r => r.checked = false);
   document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('selected'));
+  
+  // Focus on pseudo input for next vote
+  elements.pseudoInput.focus();
+  
+  alert(`✅ ${pseudo} a voté pour le ${selectedDateBtn.dataset.day} ${new Date(selectedDateBtn.dataset.date).toLocaleDateString('fr-FR')} !`);
+}
 
-  alert(`✅ ${pseudo} a voté pour le ${selectedDate.textContent} !`);
-});
+// ===== Initialize App =====
+function init() {
+  // Generate and display dates
+  const dates = initDates();
+  
+  // Display initial results
+  displayResults();
+  
+  // Event Listeners
+  elements.submitBtn.addEventListener('click', handleSubmit);
+  elements.exportBtn.addEventListener('click', () => State.exportVotes());
+  
+  // Allow Enter key to submit
+  elements.pseudoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSubmit();
+  });
+}
 
-// Initialisation
-displayResults();
+// ===== Start App =====
+document.addEventListener('DOMContentLoaded', init);

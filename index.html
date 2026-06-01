@@ -1,137 +1,135 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sondage pour organiser une rando aux Châteaux d'Oche en Haute-Savoie">
-  <title>Rando Châteaux d'Oche 🏔️ | Sondage d'Équipe</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <h1 class="title">
-        <span class="title-icon">🏔️</span>
-        Rando aux Châteaux d'Oche
-        <span class="title-icon">🥾</span>
-      </h1>
-      <p class="subtitle">
-        <span class="location">Bernex, Haute-Savoie</span>
-        <span class="separator">|</span>
-        <span class="motto">« L'obstacle est le chemin » — Marc Aurèle</span>
-      </p>
-    </header>
-
-    <!-- Date Info -->
-    <section class="date-info">
-      <h2>📅 Dates disponibles</h2>
-      <div class="date-list" id="date-list"></div>
-    </section>
-
-    <!-- Votes Results -->
-    <section class="results-section">
-      <h2>🗳️ Résultats des votes</h2>
-      <div class="results-grid" id="vote-results">
-        <p class="empty-state">Aucun vote pour l'instant... 😢</p>
-      </div>
-    </section>
-
-    <!-- Vote Form -->
-    <section class="vote-form">
-      <h2>🎭 Vote pour ta date préférée</h2>
-      
-      <div class="form-step">
-        <h3>1️⃣ Choisis ton avatar</h3>
-        <div class="avatars-grid" role="radiogroup" aria-labelledby="avatar-label">
-          <label class="avatar-card">
-            <input type="radio" name="avatar" value="🦊" aria-label="Firefox - le renard rusé">
-            <div class="avatar-content">
-              <span class="avatar-emoji" aria-hidden="true">🦊</span>
-              <span class="avatar-name">Firefox</span>
-              <span class="avatar-desc">le renard rusé</span>
-            </div>
-          </label>
-          
-          <label class="avatar-card">
-            <input type="radio" name="avatar" value="🐍" aria-label="Serpent Sexy - sssssippin' tea">
-            <div class="avatar-content">
-              <span class="avatar-emoji" aria-hidden="true">🐍</span>
-              <span class="avatar-name">Serpent Sexy</span>
-              <span class="avatar-desc">sssssippin' tea</span>
-            </div>
-          </label>
-          
-          <label class="avatar-card">
-            <input type="radio" name="avatar" value="🐼" aria-label="Panda - dort 23h/24">
-            <div class="avatar-content">
-              <span class="avatar-emoji" aria-hidden="true">🐼</span>
-              <span class="avatar-name">Panda</span>
-              <span class="avatar-desc">dort 23h/24</span>
-            </div>
-          </label>
-          
-          <label class="avatar-card">
-            <input type="radio" name="avatar" value="🐗" aria-label="Cochon - mange les bugs">
-            <div class="avatar-content">
-              <span class="avatar-emoji" aria-hidden="true">🐗</span>
-              <span class="avatar-name">Cochon</span>
-              <span class="avatar-desc">mange les bugs</span>
-            </div>
-          </label>
-          
-          <label class="avatar-card">
-            <input type="radio" name="avatar" value="🦅" aria-label="Aigle - roi du ciel">
-            <div class="avatar-content">
-              <span class="avatar-emoji" aria-hidden="true">🦅</span>
-              <span class="avatar-name">Aigle</span>
-              <span class="avatar-desc">roi du ciel</span>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-step">
-        <h3>2️⃣ Sélectionne ta date</h3>
-        <div class="dates-grid" id="date-buttons"></div>
-      </div>
-
-      <div class="form-step">
-        <h3>3️⃣ Ton pseudo</h3>
-        <div class="pseudo-input">
-          <input 
-            type="text" 
-            id="pseudo" 
-            placeholder="Ex: Jean-Mi, Sophie, Marc..."
-            aria-label="Ton pseudo"
-            required
-          >
-          <button id="submit" class="btn-primary" aria-label="Valider mon vote">
-            ✅ Valider mon vote
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Export Section -->
-    <section class="export-section">
-      <h3>💾 Exporter les votes</h3>
-      <button id="export-btn" class="btn-secondary">
-        📥 Télécharger les votes (JSON)
-      </button>
-      <button id="clear-btn" class="btn-danger">
-        🗑️ Réinitialiser les votes
-      </button>
-    </section>
-
-    <footer class="footer">
-      <p>Made with ❤️ for team randobirds | One-time poll</p>
-    </footer>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sondage pour organiser une rando au Château d'Oche en Haute-Savoie">
+  <title>Rando Château d'Oche 🏔️ | Sondage d'Équipe</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">
+        <span class="title-icon">🏔️</span>
+        Rando au Château d'Oche
+        <span class="title-icon">🥾</span>
+      </h1>
+      <p class="subtitle">
+        <span class="location">Bernex, Haute-Savoie</span>
+        <span class="separator">|</span>
+        <span class="motto">« L'obstacle est le chemin » — Marc Aurèle</span>
+      </p>
+      
+      <!-- Photo du Château d'Oche -->
+      <div class="hero-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Chateau_d%27Oche_-_Bernex.jpg/1200px-Chateau_d%27Oche_-_Bernex.jpg" 
+             alt="Château d'Oche, Bernex, Haute-Savoie" 
+             loading="lazy">
+      </div>
+    </header>
+
+    <!-- Vote Form -->
+    <section class="vote-form">
+      <h2>🎭 Vote pour ta date préférée</h2>
+      
+      <div class="form-step">
+        <h3>1️⃣ Choisis ton avatar</h3>
+        <div class="avatars-grid" role="radiogroup" aria-labelledby="avatar-label">
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🦊" aria-label="Firefox - CCO">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🦊</span>
+              <span class="avatar-name">Firefox</span>
+              <span class="avatar-desc">CCO</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐍" aria-label="Snake - Botaniste à l'ombre">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐍</span>
+              <span class="avatar-name">Snake</span>
+              <span class="avatar-desc">Botaniste à l'ombre</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐼" aria-label="Panda - Espèce protégée">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐼</span>
+              <span class="avatar-name">Panda</span>
+              <span class="avatar-desc">Espèce protégée</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐗" aria-label="Wildboar - Jambon de service">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐗</span>
+              <span class="avatar-name">Wildboar</span>
+              <span class="avatar-desc">Jambon de service</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🦅" aria-label="Eagle - Gourmet à viscères">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🦅</span>
+              <span class="avatar-name">Eagle</span>
+              <span class="avatar-desc">Gourmet à viscères</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-step">
+        <h3>2️⃣ Sélectionne ta date</h3>
+        <div class="dates-grid" id="date-buttons"></div>
+      </div>
+
+      <div class="form-step">
+        <h3>3️⃣ Ton pseudo</h3>
+        <div class="pseudo-input">
+          <input 
+            type="text" 
+            id="pseudo" 
+            placeholder="Ex: Jean-Mi, Sophie, Marc..."
+            aria-label="Ton pseudo"
+            required
+          >
+          <button id="submit" class="btn-primary" aria-label="Valider mon vote">
+            ✅ Valider mon vote
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Votes Results -->
+    <section class="results-section">
+      <h2>🗳️ Résultats des votes</h2>
+      <div class="results-grid" id="vote-results">
+        <p class="empty-state">Aucun vote pour l'instant... 😢</p>
+      </div>
+    </section>
+
+    <!-- Export Section -->
+    <section class="export-section">
+      <h3>💾 Exporter les votes</h3>
+      <button id="export-btn" class="btn-secondary">
+        📥 Télécharger les votes (JSON)
+      </button>
+    </section>
+
+    <footer class="footer">
+      <p>Made with ❤️ for team randobirds | One-time poll</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
