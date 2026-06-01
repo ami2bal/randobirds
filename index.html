@@ -1,48 +1,137 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rando Châteaux d'Oche 🏔️ | Sondage Kawaï</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <h1>✨ Rando aux Châteaux d'Oche ✨</h1>
-    <p class="subtitle">Le sommet qui nous regarde de haut... comme ton ex après une rupture 😼</p>
-
-    <div class="info">
-      <p><strong>📅 Dates proposées :</strong> <span id="dates"></span></p>
-      <p><strong>👥 Équipes :</strong> Annemasse ⚡ | Canton de Vaud 🧀 | Thonon 🌊</p>
-    </div>
-
-    <div class="votes">
-      <h2>🗳️ Votes actuels</h2>
-      <div id="vote-results"></div>
-    </div>
-
-    <div class="form">
-      <h2>🎭 Choisis ton avatar + ta date !</h2>
-      <div class="avatars">
-        <label><input type="radio" name="avatar" value="🦊"><span class="avatar">🦊<br>Firefox<br><small>(le renard qui code en JS)</small></span></label>
-        <label><input type="radio" name="avatar" value="🐍"><span class="avatar">🐍<br>Serpent Sexy<br><small>(ssssssippin' tea)</small></span></label>
-        <label><input type="radio" name="avatar" value="🐼"><span class="avatar">🐼<br>Panda<br><small>(dort 23h/24)</small></span></label>
-        <label><input type="radio" name="avatar" value="🐗"><span class="avatar">🐗<br>Cochon<br><small>(mange les bugs)</small></span></label>
-      </div>
-
-      <div class="dates">
-        <h3>📆 Quelle date ?</h3>
-        <div id="date-buttons"></div>
-      </div>
-
-      <div class="pseudo">
-        <input type="text" id="pseudo" placeholder="Ton pseudo (ex: Jean-Mi)" required>
-        <button id="submit">🚀 Valider mon vote !</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sondage pour organiser une rando aux Châteaux d'Oche en Haute-Savoie">
+  <title>Rando Châteaux d'Oche 🏔️ | Sondage d'Équipe</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">
+        <span class="title-icon">🏔️</span>
+        Rando aux Châteaux d'Oche
+        <span class="title-icon">🥾</span>
+      </h1>
+      <p class="subtitle">
+        <span class="location">Bernex, Haute-Savoie</span>
+        <span class="separator">|</span>
+        <span class="motto">« L'obstacle est le chemin » — Marc Aurèle</span>
+      </p>
+    </header>
+
+    <!-- Date Info -->
+    <section class="date-info">
+      <h2>📅 Dates disponibles</h2>
+      <div class="date-list" id="date-list"></div>
+    </section>
+
+    <!-- Votes Results -->
+    <section class="results-section">
+      <h2>🗳️ Résultats des votes</h2>
+      <div class="results-grid" id="vote-results">
+        <p class="empty-state">Aucun vote pour l'instant... 😢</p>
+      </div>
+    </section>
+
+    <!-- Vote Form -->
+    <section class="vote-form">
+      <h2>🎭 Vote pour ta date préférée</h2>
+      
+      <div class="form-step">
+        <h3>1️⃣ Choisis ton avatar</h3>
+        <div class="avatars-grid" role="radiogroup" aria-labelledby="avatar-label">
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🦊" aria-label="Firefox - le renard rusé">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🦊</span>
+              <span class="avatar-name">Firefox</span>
+              <span class="avatar-desc">le renard rusé</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐍" aria-label="Serpent Sexy - sssssippin' tea">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐍</span>
+              <span class="avatar-name">Serpent Sexy</span>
+              <span class="avatar-desc">sssssippin' tea</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐼" aria-label="Panda - dort 23h/24">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐼</span>
+              <span class="avatar-name">Panda</span>
+              <span class="avatar-desc">dort 23h/24</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🐗" aria-label="Cochon - mange les bugs">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🐗</span>
+              <span class="avatar-name">Cochon</span>
+              <span class="avatar-desc">mange les bugs</span>
+            </div>
+          </label>
+          
+          <label class="avatar-card">
+            <input type="radio" name="avatar" value="🦅" aria-label="Aigle - roi du ciel">
+            <div class="avatar-content">
+              <span class="avatar-emoji" aria-hidden="true">🦅</span>
+              <span class="avatar-name">Aigle</span>
+              <span class="avatar-desc">roi du ciel</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-step">
+        <h3>2️⃣ Sélectionne ta date</h3>
+        <div class="dates-grid" id="date-buttons"></div>
+      </div>
+
+      <div class="form-step">
+        <h3>3️⃣ Ton pseudo</h3>
+        <div class="pseudo-input">
+          <input 
+            type="text" 
+            id="pseudo" 
+            placeholder="Ex: Jean-Mi, Sophie, Marc..."
+            aria-label="Ton pseudo"
+            required
+          >
+          <button id="submit" class="btn-primary" aria-label="Valider mon vote">
+            ✅ Valider mon vote
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Export Section -->
+    <section class="export-section">
+      <h3>💾 Exporter les votes</h3>
+      <button id="export-btn" class="btn-secondary">
+        📥 Télécharger les votes (JSON)
+      </button>
+      <button id="clear-btn" class="btn-danger">
+        🗑️ Réinitialiser les votes
+      </button>
+    </section>
+
+    <footer class="footer">
+      <p>Made with ❤️ for team randobirds | One-time poll</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
