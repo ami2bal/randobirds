@@ -52,10 +52,10 @@
               <stop offset="0%" stop-color="#e0e7ff"/>
               <stop offset="100%" stop-color="#f0f4ff"/>
             </linearGradient>
-            <!-- Montagne principale -->
+            <!-- Montagne principale (vert alpin) -->
             <linearGradient id="mountainFill" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#6366f1"/>
-              <stop offset="100%" stop-color="#4338ca"/>
+              <stop offset="0%" stop-color="#4ade80"/>
+              <stop offset="100%" stop-color="#166534"/>
             </linearGradient>
             <!-- Neige / crête claire -->
             <linearGradient id="snowCap" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -65,11 +65,11 @@
           </defs>
 
           <!-- Ciel -->
-          <rect width="900" height="220" fill="url(#sky)"/>
+          <rect width="920" height="255" fill="url(#sky)"/>
 
           <!-- Montagnes lointaines (profondeur alpine) -->
-          <path d="M0,220 Q110,165 230,185 T470,148 T700,175 T900,142 L900,220 Z" fill="#a5b4fc" opacity="0.55"/>
-          <path d="M0,220 Q70,195 195,178 T440,155 T680,182 T900,158 L900,220 Z" fill="#c7d2fe" opacity="0.45"/>
+          <path d="M0,255 Q110,165 230,185 T470,148 T700,175 T920,142 L920,255 Z" fill="#a5b4fc" opacity="0.55"/>
+          <path d="M0,255 Q70,195 195,178 T440,155 T680,182 T920,158 L920,255 Z" fill="#c7d2fe" opacity="0.45"/>
 
           <!-- Corps principal de la montagne (silhouette alpine anguleuse, pas une vague) -->
           <path d="M0,220 L80,178 L165,192 L235,142 L310,168 L385,125 L460,155 L535,118 L610,148 L690,105 L765,135 L840,112 L900,145 L900,220 Z" 
@@ -79,17 +79,17 @@
           <path d="M80,178 L165,192 L235,142 L310,168 L385,125 L460,155 L535,118 L610,148 L690,105 L765,135 L840,112 L900,145" 
                 fill="none" stroke="url(#snow)" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
 
-          <!-- Ligne de crête principale -->
+          <!-- Ligne de crête (invisible - sert uniquement aux déplacements des animaux via animateMotion) -->
           <path id="crest-path"
                 d="M80,178 Q140,162 200,175 T290,148 T370,138 T455,152 T530,125 T605,142 T685,118 T755,128 T835,120 L870,135"
-                fill="none" stroke="#f1e7ff" stroke-width="4.5" stroke-linecap="round" opacity="0.95"/>
+                fill="none" stroke="none"/>
 
           <!-- (plus de points bizarres / décorations) -->
 
-          <!-- Animaux qui marchent vraiment le long de la crête grâce à animateMotion -->
+          <!-- Animaux qui marchent sur la crête (mi-hauteur du cadre) -->
           <!-- 🦊 Fox -->
           <g class="hike-animal" id="fox">
-            <g>
+            <g transform="translate(0, -10)">
               <ellipse cx="0" cy="3" rx="7" ry="5" fill="#f97316"/>
               <circle cx="-2" cy="-2" r="3.5" fill="#fff7ed"/>
               <circle cx="3" cy="-2.5" r="2.8" fill="#f97316"/>
@@ -97,27 +97,27 @@
               <path d="M1,-5.5 L3,-9 L5,-4 Z" fill="#f97316"/>
               <ellipse cx="-9" cy="5" rx="4" ry="3" fill="#f97316" transform="rotate(-28)"/>
             </g>
-            <animateMotion dur="41s" repeatCount="indefinite" begin="-2s">
+            <animateMotion dur="41s" repeatCount="indefinite" rotate="0" begin="-2s">
               <mpath href="#crest-path"/>
             </animateMotion>
           </g>
 
           <!-- 🐍 Snake -->
           <g class="hike-animal" id="snake">
-            <g>
+            <g transform="translate(0, -4)">
               <ellipse cx="0" cy="0" rx="8" ry="3.5" fill="#22c55e"/>
               <ellipse cx="7" cy="0" rx="4" ry="3" fill="#16a34a"/>
               <circle cx="9" cy="-1" r="1.2" fill="#fff"/>
               <circle cx="-2" cy="0" r="1.5" fill="#86efac" opacity="0.6"/>
             </g>
-            <animateMotion dur="47s" repeatCount="indefinite" begin="-8s">
+            <animateMotion dur="47s" repeatCount="indefinite" rotate="0" begin="-8s">
               <mpath href="#crest-path"/>
             </animateMotion>
           </g>
 
           <!-- 🐼 Panda -->
           <g class="hike-animal" id="panda">
-            <g>
+            <g transform="translate(0, -11)">
               <ellipse cx="0" cy="2" rx="6.5" ry="5.5" fill="#111827"/>
               <circle cx="1" cy="-3" r="5" fill="#f8fafc"/>
               <circle cx="-3" cy="-6" r="2.2" fill="#111827"/>
@@ -126,28 +126,28 @@
               <ellipse cx="3.5" cy="-3.5" rx="1.8" ry="2" fill="#111827"/>
               <ellipse cx="1" cy="0" rx="1" ry="0.7" fill="#111827"/>
             </g>
-            <animateMotion dur="52s" repeatCount="indefinite" begin="-14s">
+            <animateMotion dur="52s" repeatCount="indefinite" rotate="0" begin="-14s">
               <mpath href="#crest-path"/>
             </animateMotion>
           </g>
 
           <!-- 🐗 Wildboar -->
           <g class="hike-animal" id="boar">
-            <g>
+            <g transform="translate(0, -9)">
               <ellipse cx="0" cy="1" rx="8" ry="5" fill="#854d0e"/>
               <ellipse cx="7" cy="-1" rx="5" ry="4" fill="#713f12"/>
               <path d="M3,-4 L1,-8 L6,-4 Z" fill="#854d0e"/>
               <path d="M9,-3.5 L11,-7 L12,-2 Z" fill="#713f12"/>
               <line x1="10" y1="1" x2="11" y2="3" stroke="#f5d0a9" stroke-width="1.2"/>
             </g>
-            <animateMotion dur="38s" repeatCount="indefinite" begin="-5s">
+            <animateMotion dur="38s" repeatCount="indefinite" rotate="0" begin="-5s">
               <mpath href="#crest-path"/>
             </animateMotion>
           </g>
 
           <!-- 🦅 Eagle -->
           <g class="hike-animal" id="eagle">
-            <g>
+            <g transform="translate(0, -12)">
               <ellipse cx="0" cy="1" rx="4.5" ry="6" fill="#334155"/>
               <circle cx="1" cy="-5" r="3" fill="#f1f5f9"/>
               <path d="M3,-5 L6,-4 L3,-3 Z" fill="#f59e0b"/>
@@ -155,7 +155,7 @@
               <ellipse cx="6" cy="0" rx="5" ry="1.8" fill="#475569" transform="rotate(18)"/>
               <circle cx="2" cy="-5.5" r="1" fill="#111827"/>
             </g>
-            <animateMotion dur="55s" repeatCount="indefinite" begin="-19s">
+            <animateMotion dur="55s" repeatCount="indefinite" rotate="0" begin="-19s">
               <mpath href="#crest-path"/>
             </animateMotion>
           </g>
