@@ -148,10 +148,13 @@ function initDates() {
     btn.textContent = date.label;
     btn.dataset.date = date.date;
     btn.dataset.day = date.day;
+    
+    // Multi-sélection (plusieurs dates possibles)
     btn.onclick = () => {
-      document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
+      btn.classList.toggle('selected');
+      updateSubmitState();
     };
+    
     container.appendChild(btn);
   });
   return dates;
@@ -173,34 +176,54 @@ function displayResults() {
     return acc;
   }, {});
   
+  // Trier par popularité (nombre de votes décroissant)
+  const sortedDates = Object.keys(votesByDate).sort((a, b) => {
+    return votesByDate[b].length - votesByDate[a].length;
+  });
+  
   container.innerHTML = '';
-  Object.keys(votesByDate).sort().forEach(date => {
+  
+  sortedDates.forEach(date => {
     const dateVotes = votesByDate[date];
+    const count = dateVotes.length;
     const dateLabel = new Date(date).toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'short'
+      weekday: 'long', day: 'numeric', month: 'long'
     });
     
-    // Petit header de date pour meilleure lisibilité (UX 2026)
-    const dateHeader = document.createElement('div');
-    dateHeader.className = 'date-group-header';
-    dateHeader.innerHTML = `
-      <span class="date-label">${dateLabel}</span>
-      <span class="vote-count">${dateVotes.length} vote${dateVotes.length > 1 ? 's' : ''}</span>
-    `;
-    container.appendChild(dateHeader);
+    // Carte date + popularité
+    const dateBlock = document.createElement('div');
+    dateBlock.className = 'date-result-block';
     
-    dateVotes.forEach(vote => {
-      const card = document.createElement('div');
-      card.className = 'vote-card';
-      card.innerHTML = `
-        <span class="avatar-emoji">${vote.avatar}</span>
-        <span class="pseudo">${vote.pseudo}</span>
-        <button class="delete-vote" title="Supprimer ce vote">❌</button>
-      `;
+    const percentage = Math.round((count / votes.length) * 100);
+    
+    dateBlock.innerHTML = `
+      <div class="date-result-header">
+        <div class="date-info">
+          <span class="date-label">${dateLabel}</span>
+          <span class="popularity">${count} vote${count > 1 ? 's' : ''} <span class="percent">(${percentage}%)</span></span>
+        </div>
+        <div class="popularity-bar">
+          <div class="bar-fill" style="width: ${percentage}%"></div>
+        </div>
+      </div>
       
-      card.querySelector('.delete-vote').addEventListener('click', async (e) => {
+      <div class="voters">
+        ${dateVotes.map(vote => `
+          <div class="voter" data-vote-id="${vote.id}">
+            <span class="avatar">${vote.avatar}</span>
+            <span class="name">${vote.pseudo}</span>
+            <button class="delete-vote-small" title="Supprimer ce vote">×</button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    
+    // Gestion suppression individuelle
+    dateBlock.querySelectorAll('.delete-vote-small').forEach((btn, i) => {
+      btn.addEventListener('click', async (e) => {
         e.stopPropagation();
-        const shouldDelete = await cuteConfirm(`Supprimer le vote de ${vote.pseudo} ?`);
+        const vote = dateVotes[i];
+        const shouldDelete = await cuteConfirm(`Supprimer le vote de ${vote.pseudo} pour cette date ?`);
         if (shouldDelete) {
           let idx = State.votes.findIndex(v => v.id && v.id === vote.id);
           if (idx === -1) {
@@ -212,18 +235,19 @@ function displayResults() {
           }
         }
       });
-      container.appendChild(card);
     });
+    
+    container.appendChild(dateBlock);
   });
 }
 
 // ===== Form UX (2026 best practices + kawaii) =====
 function updateSubmitState() {
   const hasAvatar = !!document.querySelector('input[name="avatar"]:checked');
-  const hasDate = !!document.querySelector('.date-btn.selected');
+  const hasAtLeastOneDate = document.querySelectorAll('.date-btn.selected').length > 0;
   const hasPseudo = document.getElementById('pseudo').value.trim().length >= 2;
   const btn = document.getElementById('submit');
-  if (btn) btn.disabled = !(hasAvatar && hasDate && hasPseudo);
+  if (btn) btn.disabled = !(hasAvatar && hasAtLeastOneDate && hasPseudo);
 }
 
 function showFormFeedback(message, isError = true) {
@@ -250,36 +274,41 @@ function handleVoteSubmit(e) {
   if (e) e.preventDefault();
   
   const selectedAvatar = document.querySelector('input[name="avatar"]:checked');
-  const selectedDateBtn = document.querySelector('.date-btn.selected');
+  const selectedDateBtns = Array.from(document.querySelectorAll('.date-btn.selected'));
   const pseudoInput = document.getElementById('pseudo');
   const pseudo = pseudoInput.value.trim();
   
-  if (!selectedAvatar || !selectedDateBtn || !pseudo) {
-    showFormFeedback('⚠️ Avatar, date ET pseudo (2 caractères min) sont obligatoires !');
-    // Highlight the first missing step cutely
+  if (!selectedAvatar || selectedDateBtns.length === 0 || !pseudo) {
+    showFormFeedback('⚠️ Avatar, au moins une date ET pseudo (2 caractères min) sont obligatoires !');
+    
     if (!selectedAvatar) {
       document.querySelector('.avatars-grid')?.classList.add('needs-attention');
       setTimeout(() => document.querySelector('.avatars-grid')?.classList.remove('needs-attention'), 1200);
-    } else if (!selectedDateBtn) {
+    } else if (selectedDateBtns.length === 0) {
       document.getElementById('date-buttons')?.classList.add('needs-attention');
       setTimeout(() => document.getElementById('date-buttons')?.classList.remove('needs-attention'), 1200);
     }
     return;
   }
   
-  // Add vote with unique id for reliable delete (2026 good practice)
-  State.addVote({
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
-    avatar: selectedAvatar.value,
-    date: selectedDateBtn.dataset.date,
-    pseudo: pseudo
+  // Pour chaque date sélectionnée → un vote séparé (on veut compter les préférences par date)
+  const baseId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  
+  selectedDateBtns.forEach((btn, index) => {
+    State.addVote({
+      id: baseId + '-' + index,
+      avatar: selectedAvatar.value,
+      date: btn.dataset.date,
+      pseudo: pseudo
+    });
   });
   
   displayResults();
   clearFormFeedback();
   
   // Cute success micro-feedback
-  showFormFeedback('Parfait ! Rando validée 🥾', false);
+  const nbDates = selectedDateBtns.length;
+  showFormFeedback(`Parfait ! ${nbDates} date${nbDates > 1 ? 's' : ''} enregistrée${nbDates > 1 ? 's' : ''} 🥾`, false);
   
   // Reset form
   pseudoInput.value = '';

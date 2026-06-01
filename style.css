@@ -310,28 +310,103 @@ section { margin-bottom: var(--space-xl); }
 .vote-card .avatar-emoji { font-size: 2.5rem; display: block; margin-bottom: var(--space-xs); }
 .vote-card .pseudo { font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs); }
 
-/* Group headers in results (clearer UX) */
-.date-group-header {
+/* === NOUVEAU : Affichage résultats par popularité de dates === */
+.date-result-block {
   grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
-  padding: 0.35rem 0.75rem;
-  margin-top: var(--space-sm);
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-bg-tertiary);
 }
-.date-group-header .date-label { font-weight: 700; color: var(--color-primary); }
-.date-group-header .vote-count {
-  background: var(--color-primary-light);
-  color: white;
-  font-size: 0.7rem;
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--radius-full);
+
+.date-result-header {
+  margin-bottom: var(--space-sm);
+}
+
+.date-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.35rem;
+}
+
+.date-info .date-label {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-text-primary);
+}
+
+.date-info .popularity {
+  font-size: 0.85rem;
   font-weight: 700;
+  color: var(--color-primary);
+}
+
+.date-info .percent {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.8em;
+}
+
+.popularity-bar {
+  height: 6px;
+  background: var(--color-bg-tertiary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Liste des votants compacte */
+.voters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.voter {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-bg-tertiary);
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.voter .avatar {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.voter .name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.delete-vote-small {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.1s ease;
+}
+
+.delete-vote-small:hover {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 /* Cute attention state for missing form step */
