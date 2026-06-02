@@ -11,12 +11,153 @@ const CONFIG = {
   ]
 };
 
-// ===== State Management =====
+// ===== Stockage distant persistant (SANS DB à installer) =====
+// Utilise Firebase Realtime Database (plan gratuit Spark suffit largement).
+// URL configurée avec le projet que tu as créé.
+const REMOTE_VOTES_URL = 'https://randobirds-oche-default-rtdb.europe-west1.firebasedatabase.app/votes.json';
+
+// ⚠️ Rappel : Va dans Firebase → Realtime Database → onglet "Règles" et mets :
+// {
+//   "rules": {
+//     "votes": { ".read": true, ".write": true }
+//   }
+// }
+// Puis "Publier". Sans ça, les votes ne seront pas lisibles/écrivables.
+
+
+// ===== State Management (local + distant) =====
 const State = {
-  votes: JSON.parse(localStorage.getItem('randoVotes')) || [],
-  save() { localStorage.setItem('randoVotes', JSON.stringify(this.votes)); },
-  addVote(vote) { this.votes.push(vote); this.save(); },
-  removeVote(index) { this.votes.splice(index, 1); this.save(); },
+  votes: [],
+  _lastRemoteLoad: 0,
+
+  // Charge depuis le remote (si configuré) avec fallback localStorage
+  async load() {
+    // Toujours avoir un cache local pour l'instantané + offline
+    const cached = JSON.parse(localStorage.getItem('randoVotes') || '[]');
+    this.votes = Array.isArray(cached) ? cached : [];
+
+    if (!REMOTE_VOTES_URL) {
+      return;
+    }
+
+    try {
+      const res = await fetch(REMOTE_VOTES_URL);
+      if (res.ok) {
+        const data = await res.json();
+        this.votes = Array.isArray(data) ? data : [];
+        localStorage.setItem('randoVotes', JSON.stringify(this.votes));
+        this._lastRemoteLoad = Date.now();
+      }
+    } catch (e) {
+      // On garde le cache local, pas de panique pour un sondage d'équipe
+      console.warn('[State] Impossible de charger les votes distants, utilisation du cache local.', e);
+    }
+  },
+
+  // Sauvegarde locale + push distant si activé
+  async save() {
+    localStorage.setItem('randoVotes', JSON.stringify(this.votes));
+
+    if (!REMOTE_VOTES_URL) return;
+
+    try {
+      await fetch(REMOTE_VOTES_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.votes)
+      });
+    } catch (e) {
+      console.warn('[State] Sauvegarde distante échouée (votes gardés en local).', e);
+    }
+  },
+
+  // Ajout "safe" : read-modify-write quand remote est actif (évite les écrasements)
+  async addVotes(newVotes) {
+    if (!REMOTE_VOTES_URL) {
+      newVotes.forEach(v => this.votes.push(v));
+      await this.save();
+      return;
+    }
+
+    try {
+      // 1. Récupérer l'état le plus frais
+      let current = [];
+      try {
+        const res = await fetch(REMOTE_VOTES_URL);
+        if (res.ok) {
+          const d = await res.json();
+          current = Array.isArray(d) ? d : [];
+        }
+      } catch (_) { /* on continue avec ce qu'on a */ }
+
+      // 2. Ajouter seulement les nouveaux (par id)
+      const existingIds = new Set(current.map(v => v.id).filter(Boolean));
+      for (const nv of newVotes) {
+        if (!nv.id || !existingIds.has(nv.id)) {
+          current.push(nv);
+          existingIds.add(nv.id);
+        }
+      }
+
+      this.votes = current;
+
+      // 3. Écrire l'ensemble
+      await fetch(REMOTE_VOTES_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.votes)
+      });
+      localStorage.setItem('randoVotes', JSON.stringify(this.votes));
+    } catch (e) {
+      // Fallback : on ajoute en local seulement
+      console.warn('[State] addVotes distant a échoué, fallback local uniquement.', e);
+      newVotes.forEach(v => this.votes.push(v));
+      await this.save(); // save local seulement (REMOTE est down)
+    }
+  },
+
+  async removeVote(index) {
+    if (index < 0 || index >= this.votes.length) return;
+    const removed = this.votes.splice(index, 1)[0];
+
+    if (!REMOTE_VOTES_URL) {
+      await this.save();
+      return;
+    }
+
+    // Pour la suppression on refait un read-modify-write pour cohérence
+    try {
+      let current = [];
+      const res = await fetch(REMOTE_VOTES_URL);
+      if (res.ok) {
+        const d = await res.json();
+        current = Array.isArray(d) ? d : [];
+      }
+
+      // Retirer par id si possible, sinon fallback sur l'objet
+      const idx = current.findIndex(v =>
+        (removed.id && v.id === removed.id) ||
+        (v.pseudo === removed.pseudo && v.date === removed.date && v.avatar === removed.avatar)
+      );
+      if (idx !== -1) current.splice(idx, 1);
+
+      this.votes = current;
+      await fetch(REMOTE_VOTES_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.votes)
+      });
+      localStorage.setItem('randoVotes', JSON.stringify(this.votes));
+    } catch (e) {
+      await this.save(); // au moins le local est à jour
+    }
+  },
+
+  async clearAll() {
+    this.votes = [];
+    await this.save();
+  },
+
   exportVotes() {
     const data = JSON.stringify(this.votes, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -230,7 +371,7 @@ function displayResults() {
             idx = State.votes.findIndex(v => v.pseudo === vote.pseudo && v.date === vote.date && v.avatar === vote.avatar);
           }
           if (idx !== -1) {
-            State.removeVote(idx);
+            await State.removeVote(idx);
             displayResults();
           }
         }
@@ -270,7 +411,7 @@ function clearFormFeedback() {
   if (fb) fb.textContent = '';
 }
 
-function handleVoteSubmit(e) {
+async function handleVoteSubmit(e) {
   if (e) e.preventDefault();
   
   const selectedAvatar = document.querySelector('input[name="avatar"]:checked');
@@ -293,16 +434,15 @@ function handleVoteSubmit(e) {
   
   // Pour chaque date sélectionnée → un vote séparé (on veut compter les préférences par date)
   const baseId = Date.now().toString(36) + Math.random().toString(36).slice(2);
-  
-  selectedDateBtns.forEach((btn, index) => {
-    State.addVote({
-      id: baseId + '-' + index,
-      avatar: selectedAvatar.value,
-      date: btn.dataset.date,
-      pseudo: pseudo
-    });
-  });
-  
+  const newVotes = selectedDateBtns.map((btn, index) => ({
+    id: baseId + '-' + index,
+    avatar: selectedAvatar.value,
+    date: btn.dataset.date,
+    pseudo: pseudo
+  }));
+
+  await State.addVotes(newVotes);
+
   displayResults();
   clearFormFeedback();
   
@@ -390,7 +530,10 @@ function injectKeyframes() {
 }
 
 // ===== Initialize App =====
-function init() {
+async function init() {
+  // Charge d'abord les votes distants (ou local) AVANT d'afficher quoi que ce soit
+  await State.load();
+
   // Cache elements
   elements = {
     dateButtons: document.getElementById('date-buttons'),
@@ -440,6 +583,21 @@ function init() {
   
   elements.exportBtn.addEventListener('click', () => State.exportVotes());
   
+  // Refresh results from remote (useful to see votes des potes rapidement)
+  const refreshBtn = document.getElementById('refresh-results-btn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      const oldCount = State.votes.length;
+      await State.load();
+      displayResults();
+      if (State.votes.length !== oldCount) {
+        // petit feedback visuel optionnel
+        refreshBtn.textContent = '✓ mis à jour';
+        setTimeout(() => { if (refreshBtn) refreshBtn.textContent = 'rafraîchir'; }, 1200);
+      }
+    });
+  }
+
   // Clear all votes (with cute confirm)
   const clearBtn = document.getElementById('clear-all-btn');
   if (clearBtn) {
@@ -447,8 +605,7 @@ function init() {
       if (State.votes.length === 0) return;
       const ok = await cuteConfirm('Effacer TOUS les votes de ce sondage ?');
       if (ok) {
-        State.votes = [];
-        State.save();
+        await State.clearAll();
         displayResults();
       }
     });
@@ -456,6 +613,27 @@ function init() {
   
   // Initial state
   updateSubmitState();
+
+  // Met à jour le petit texte sous les résultats selon le mode de stockage
+  const storageNote = document.getElementById('storage-note');
+  if (storageNote) {
+    storageNote.textContent = REMOTE_VOTES_URL
+      ? 'Votes partagés de façon persistante (multi-appareils)'
+      : 'Votes sauvegardés localement dans ton navigateur uniquement';
+  }
+
+  // Polling léger pour voir les votes des autres (toutes les ~20s) quand remote activé
+  if (REMOTE_VOTES_URL) {
+    setInterval(async () => {
+      try {
+        const before = State.votes.length;
+        await State.load();
+        if (State.votes.length !== before) {
+          displayResults();
+        }
+      } catch (_) {}
+    }, 20000);
+  }
   
   // Global Escape for modals (accessibility 2026)
   document.addEventListener('keydown', (e) => {
@@ -467,4 +645,11 @@ function init() {
 }
 
 // Start when DOM is ready
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  init().catch(err => {
+    console.error('Init error', err);
+    // Fallback: on essaie quand même d'initialiser ce qu'on peut
+    initDates();
+    displayResults();
+  });
+});
